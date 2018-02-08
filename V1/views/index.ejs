@@ -1,0 +1,32 @@
+<% include partials/header %>
+
+<div class="container">
+  <header class="jumbotron">
+    <div class="container">
+      <h1>Welcome to MyChild</h1>
+      <p>View all the settings available across the UK</p>
+      <p>
+        <a class="btn btn-primary btn-lg" href="/settings/new">Add New Setting</a>
+      </p>
+    </div>
+  </header>
+
+  <div class="row text-center" style="display: flex; flex-wrap: wrap;">
+    <% settings.forEach(function(setting){ %>
+      <div class="col-md-3 col-sm-6">
+        <div class="thumbnail">
+          <img src='<%= setting.image %>' />
+            <div class="caption">
+              <h4><%= setting.name %></h4>
+            </div>
+            <p>
+              <a href="/settings/<%= setting._id  %>" class="btn btn-primary">More info</a>
+            </p>
+        </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
+
+
+<% include partials/footer %>
