@@ -2,38 +2,20 @@ var express    = require('express');
 var app        = express();
 var bodyParser = require('body-parser');
 var mongoose   = require ('mongoose');
+var Setting    = require ('./models/setting');
+var seedDB     = require ('./seeds')
+// var Comment    = require ('./modles/comment');
+// var User       = require ('./modles/user');
 
 var PORT = 3000;
+
 
 mongoose.connect("mongodb://localhost/my_child");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
-//SCHEMA setup
-
-var settingSchema = new mongoose.Schema({
-  name: String,
-  image: String,
-  description: String
-});
-
-var Setting = mongoose.model("Setting", settingSchema);
-
-// Setting.create(
-//     {
-//       name: 'The Orange Tree',
-//       image: 'http://www.theorangetreedaynursery.co.uk/sites/all/themes/theme1140/img/logo-small.png',
-//       description:'A wonderful newly set up nursery located in a rural area. Rated good by OFSTED.'
-//     },
-//     function(err, setting){
-//       if(err){
-//         console.log("err");
-//       } else {
-//         console.log("Newly created setting: ");
-//         console.log(setting);
-//       }
-//     })
+seedDB();
 
 app.get('/', function(req, res){
   res.render('landing');
@@ -77,7 +59,7 @@ app.get('/settings/new', function(req, res){
 //SHOW Route - Shows individual setting information
 app.get("/settings/:id", function(req, res){
   //Find the setting with the provided ID
-  Setting.findById(req.params.id, function(err, foundSetting){
+  Setting.findById(req.params.id).populate("comments").exec(function(err, foundSetting){
     if(err){
       console.log(err)
     } else {
